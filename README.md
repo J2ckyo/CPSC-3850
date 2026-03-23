@@ -1,5 +1,5 @@
 # CPSC-3850
 Final Project -
-Least Square - Lemon Burger - 245
 ### THE LEVENBERG–MARQUARDT METHOD #
+* Least Square
 * Page 258 / 280 PDF
