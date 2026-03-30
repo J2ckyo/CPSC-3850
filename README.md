@@ -12,3 +12,19 @@
 #### The Subproblem
 #### At each iteration, the algorithm solves for a step $p$ by minimizing a local quadratic model within a "trust region":
 <p align="center"> $$\min_p \frac{1}{2} \|J_k p + r_k\|^2, \quad \text{subject to } \|p\| \le \Delta_k$$ </p>
+
+#### - $J_k$ is the Jacobian matrix of the residuals.
+#### - $r_k$ is the current residual vector.
+#### - $\delta_k$ is the trust-region radius.
+### The Damped Equation
+#### The solution to this subproblem is found by solving the "damped" normal equations:
+<p align="center"> $$(J^T J + \lambda I) p = -J^T r$$ </p>
+
+#### - Large $\lambda$: When the model is unreliable (far from the minimum), $\lambda$ increases. The $(J^T J)$ term becomes negligible compared to $\lambda I$, and the step $p$ aligns with the negative gradient.
+#### - Small $\lambda$: When the model is accurate (near the minimum), $\lambda$ decreases. The algorithm behaves like the Gauss-Newton method, providing rapid convergence.
+
+### Theoretical Properties
+#### Global Convergence: Unlike the standard Gauss-Newton method, which can fail if the Jacobian is rank-deficient, the term $\lambda I$ ensures the matrix is always positive definite and invertible. This guarantees that the algorithm can always find a descent direction.
+#### Local Convergence: As the algorithm approaches the solution $x^*$, $\lambda$ is reduced toward zero. If the residuals at the solution are small, the method achieves a quadratic or near-quadratic convergence rate, similar to Newton's method.
+#### Per-Iteration Cost: The primary cost is solving the linear system $(J^T J + \lambda I) p = -J^T r$. For a dense Jacobian, this typically requires $O(m n^2)$ operations to form $J^T J$ and $O(n^3)$ for the Cholesky factorization.
+#### Memory Efficiency: It can be implemented as an augmented least-squares problem to avoid squaring the condition number of $J$, improving numerical stability.
